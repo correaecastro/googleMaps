@@ -1,0 +1,112 @@
+<!DOCTYPE>
+<html lang="en">
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Google Maps Cluster</title>
+
+      <meta name="robots" content="no-cache" />
+      <meta name="description" content="Rodrigo Corrêa e Castro" />
+      <meta name="keywords" content="Rodrigo Corrêa e Castro" />
+      <meta name="robots" content="no-cache" />
+      <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+   </head>
+   <body>
+
+      <div id="map_canvas" style="width:100%; height:450px;"></div>
+      <div id="directionsDiv"></div>
+
+      <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+      <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js"></script>
+
+
+      <script type="text/javascript">
+      //<![CDATA[
+        
+         var map; // Global declaration of the map
+         var iw = new google.maps.InfoWindow(); // Global declaration of the infowindow
+         var lat_longs = new Array();
+         var markers = new Array();
+         var markerCluster;
+         function initialize() {
+          
+            var myLatlng = new google.maps.LatLng(-23.005735, -44.315759);
+            var myOptions = {
+               zoom: 13,
+               center: myLatlng,
+               mapTypeId: google.maps.MapTypeId.ROADMAP
+            }
+            map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+          
+
+
+            //-------------------------------------------------- MARKER 0
+            var myLatlng = new google.maps.LatLng(-21.5484899,-45.7356215);
+
+            var markerOptions = {
+               map: map,
+               position: myLatlng,
+               title: "Paraguaçu/MG"   
+            };
+            marker_0 = createMarker(markerOptions);
+
+            marker_0.set("content", "<strong>Paraguaçu/MG</strong><br/>Conteúdo HTML");
+
+            google.maps.event.addListener(marker_0, "click", function() {
+               iw.setContent(this.get("content"));
+               iw.open(map, this);
+            });
+
+
+
+            //-------------------------------------------------- MARKER 1
+            var myLatlng = new google.maps.LatLng(-22.999454, -44.302429);
+
+            var markerOptions = {
+               map: map,
+               position: myLatlng,
+               title: "Angra dos Reis/RJ"    
+            };
+            marker_1 = createMarker(markerOptions);
+
+            marker_1.set("content", "<strong>Angra dos Reis/RJ</strong><br/>Conteúdo HTML");
+
+            google.maps.event.addListener(marker_1, "click", function() {
+               iw.setContent(this.get("content"));
+               iw.open(map, this);
+            });
+
+
+            var clusterOptions = {
+               gridSize: 60,
+               minimumClusterSize: 2
+            };
+            markerCluster = new MarkerClusterer(map, markers, clusterOptions);
+
+            fitMapToBounds();
+
+         }
+
+         function createMarker(markerOptions) {
+            var marker = new google.maps.Marker(markerOptions);
+            markers.push(marker);
+            lat_longs.push(marker.getPosition());
+            return marker;
+         }
+
+         function fitMapToBounds() {
+            var bounds = new google.maps.LatLngBounds();
+            if (lat_longs.length>0) {
+               for (var i=0; i<lat_longs.length; i++) {
+               bounds.extend(lat_longs[i]);
+            }
+               map.fitBounds(bounds);
+            }
+         }
+
+         window.onload = initialize;
+      
+      //]]>
+      </script>
+
+    </body>
+</html>
